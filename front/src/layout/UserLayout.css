@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+:root {
+    --primary-color: hsl(250, 6%, 84%);
+    --accent-color: rgb(19, 60, 105);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Roboto Mono", monospace;
+}
+
+body {
+    background-color: rgb(50, 52, 55);
+}
+
+header {
+    width: 100%;
+    height: 80px;
+}
+
+.header_wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 60px;
+    align-items: center;
+    height: 100%;
+}
+
+.webLogo {
+    color: var(--primary-color);
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.logout_wrapper {
+    color: #fd2b34;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center !important;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 10px 12px;
+    border-radius: 5px;
+}
+
+.logout_icon {
+    width: 20px;
+    height: auto;
+    object-fit: cover;
+}
+
+.logout_wrapper:hover {
+    background-color: rgb(70, 72, 77);
+}
+
+.links_wrapper {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.navbar_link {
+    color: var(--primary-color);
+    cursor: pointer;
+    position: relative;
+}
+
+.navbar_link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px; 
+    background-color: var(--primary-color);
+    transform: scaleX(0); 
+    transform-origin: right;
+    transition: transform 0.3s ease; 
+}
+
+.navbar_link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}

@@ -1,0 +1,100 @@
+.recommendation_sect {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+}
+
+.recommendation_container {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.recom_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recom_title {
+    font-size: 1.7rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    padding: 20px 0;
+    text-transform: capitalize;
+}
+
+.recom_movie_wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;  
+    gap: 20px;
+}
+
+.slider_wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.recom_btn_wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.recom_btn_wrapper button {
+    background-color: var(--accent-color);
+    padding: 10px 15px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.slider_btn:disabled {
+    background-color: #29292c;
+    cursor: not-allowed;
+}
+
+.slider_viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.slider_track {
+    display: flex;
+    gap: 25px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.trend_item {
+    flex: 0 0 250px;
+    transition: all 0.3s ease-in-out; 
+    cursor: pointer;
+}
+
+.trending_image_side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.trending_text_side h3 {
+    color: var(--primary-color);
+}
+
+.watchlist_message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+}
