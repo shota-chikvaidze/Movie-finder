@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+:root {
+    --primary-color: hsl(250, 6%, 84%);
+    --accent-color: rgb(19, 60, 105);
+}
+
+* {
+    font-family: "Roboto Mono", monospace;
+}
+
+body {
+    background-color: rgb(50, 52, 55);
+}
+
+.paragraph {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+    pointer-events: none;
+}
+
+.paragraph_wrapper:hover .paragraph {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.home_icon {
+    font-size: 4.5rem;
+    transition: all 0.35s ease-in-out;
+    color: white;
+}
+
+.paragraph_wrapper:hover .home_icon {
+    transform: scale(1.05);
+}

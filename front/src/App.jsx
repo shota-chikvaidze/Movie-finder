@@ -1,0 +1,53 @@
+import React from "react"
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { UserAuthStore } from './store/UserAuthStore'
+import { FetchMe } from './hooks/FetchUser'
+
+import { Login } from "./pages/login/Login"
+
+import { Home } from './pages/home/Home'
+import { Movies } from "./pages/movies/Movies"
+import { Series } from "./pages/series/Series"
+import { Recom } from "./pages/recom/Recom"
+
+import Navbar from './layout/Navbar'
+
+
+function App() {
+
+  
+  const { isLoading } = FetchMe()
+  const user = UserAuthStore((s) => s.user)
+
+  if(isLoading) {
+    return <p>Loading...</p>
+  }
+
+  return (
+    <>
+
+      {!user && (
+        <Routes>
+          <Route path="/login" element={ <Login /> } />
+          <Route path="*" element={ <Navigate to={'/login'} /> } />
+        </Routes>
+      )}
+
+      {user && (
+        <>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={ <Home /> } />
+            <Route path="/movies" element={ <Movies /> } />
+            <Route path="/series" element={ <Series /> } />
+            <Route path="/recommendations" element={ <Recom /> } />
+            <Route path="*" element={ <Navigate to={'/'} /> } />
+          </Routes>
+        </>
+      )}
+
+    </>
+  )
+}
+
+export default App
