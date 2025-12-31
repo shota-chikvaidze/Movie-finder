@@ -1,24 +1,25 @@
 const mongoose = require('mongoose')
 
 const movieShema = mongoose.Schema({
+    tmdbId: { type: Number, unique: true },
     title: { type: String, required: true },
-    description: String,
+    overview: String,
     releaseYear: Number,
     runtime: Number,
-    image: { type: Object, required: true },
+    image: { poster: { type: String, required: true }, backdrop: String},
 
+    popularity: Number,
     genres: [String],
     mood: [String],
-    country: String,
+    countries: [String],
 
-    rating: Number,
+    rating: { type: Number, min: 0, max: 10 },
     director: String,
     cast: [String],
     writers: [String],
     ageRating: String,
     
-    createdAt: { type: Date, default: Date.now() },
-    updatedAt: { type: Date, default: Date.now() },
-})
+
+}, { timestamps: true })
 
 module.exports = mongoose.model('Movie', movieShema)

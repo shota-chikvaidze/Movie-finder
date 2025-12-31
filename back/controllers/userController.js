@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
 
         const { username, email, password } = req.body
 
-        const findUser = await User.findOne({ username, email })
+        const findUser = await User.findOne({ $or: [{username}, {email}] })
         if(findUser){
             return res.status(400).json({message: 'user already exists'})
         }
@@ -27,12 +27,24 @@ exports.register = async (req, res) => {
             password: hashed
         })
 
-        const token = jwt.sign({ _id: createUser._id }, process.env.JWT, {
-            expiresIn: '2d'
+        const token = jwt.sign({ id: createUser._id }, process.env.JWT, {
+            expiresIn: '1d'
         })
 
-        res.status(201).json({message: 'user created successfuly', token, createUser})
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1 * 24 * 60 * 60 * 1000 
+        })
 
+        const userSafe = {
+            id: createUser._id,
+            username: createUser.username,
+            email: createUser.email,
+        }
+
+        res.status(201).json({message: 'user created successfuly', accessToken: token, user: userSafe})
     }catch(err){
         res.status(500).json({message: 'register error', error: err.message})
     }
@@ -50,14 +62,28 @@ exports.login = async (req, res) => {
 
         const checkPass = await bcrypt.compare(password, findUser.password)
         if(!checkPass){
-            res.status(400).json({message: 'invalid password'})
+            return res.status(400).json({message: 'invalid password'})
         }
 
         const token = jwt.sign({ id: findUser._id }, process.env.JWT, {
-            expiresIn: '2d'
+            expiresIn: '1d'
         })
 
-        res.status(200).json({message: 'user logged in successfully', token})
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1 * 24 * 60 * 60 * 1000 
+        })
+
+        const userSafe = {
+            id: findUser._id,
+            username: findUser.username,
+            email: findUser.email,
+        }
+
+
+        res.status(200).json({message: 'user logged in successfully', user: userSafe, accessToken: token})
 
     }catch(err){
         res.status(500).json({message: 'login error', error: err.message})
@@ -67,11 +93,19 @@ exports.login = async (req, res) => {
 exports.getUser = async (req, res) => {
     try{
         
-        const user = await User.findById(req.user.id).select('-password')
         if (!req.user) {
             return res.status(401).json({ user: null, message: 'not authenticated' })
         }
-        res.status(200).json({user})
+
+        const user = await User.findById(req.user.id).select('-password')
+
+        const userSafe = {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        }
+        
+        res.status(200).json({user: userSafe})
 
     }catch(err){
         res.status(500).json({message: 'error getting user', error: err.message})
@@ -88,7 +122,7 @@ exports.googleLogin = async (req, res) => {
 
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audiance: process.env.CLIENT_ID
+            audience: process.env.CLIENT_ID
         })
 
         const { email, name, picture } = ticket.getPayload()
@@ -106,7 +140,7 @@ exports.googleLogin = async (req, res) => {
             })
         }
 
-        const appToken = jwt.sign({ _id: user._id }, process.env.JWT, {
+        const appToken = jwt.sign({ id: user._id }, process.env.JWT, {
             expiresIn: '2d'
         })
 
@@ -114,5 +148,22 @@ exports.googleLogin = async (req, res) => {
 
     }catch(err){
         res.status(500).json({message: 'google error', error: err.message})
+    }
+}
+
+
+exports.logout = async (req, res) => {
+    try{
+
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 0
+        })
+
+        res.status(200).json({ message: 'Logged out successfully' })
+    } catch (err) {
+        res.status(500).json({ message: 'server error', error: err.message })
     }
 }

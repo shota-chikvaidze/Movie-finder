@@ -6,6 +6,7 @@ const router = express.Router()
 router.post('/register', userController.register)
 router.post('/login', userController.login)
 router.post('/google', userController.googleLogin)
-router.get('/get-user', protect, userController.getUser)
+router.get('/me', protect, userController.getUser)
+router.post('/logout', protect, userController.logout)
 
 module.exports = router
