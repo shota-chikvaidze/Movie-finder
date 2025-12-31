@@ -49,30 +49,78 @@ export const Login = () => {
     }
 
   return (
-    <div>
+    <section className="flex justify-center items-center min-h-screen bg-[#2f3236] px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-[420px] flex flex-col items-center gap-4"
+      >
+        <h2 className="text-white text-xl font-semibold mb-2">
+          {isLogin ? 'Login' : 'Register'}
+        </h2>
 
-        <form onSubmit={handleSubmit}>
+        <button
+          type="button"
+          onClick={GoogleEndpoint}
+          className="w-full flex items-center justify-center gap-3 bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-white/90 transition"
+        >
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          Continue with Google
+        </button>
 
-            {!isLogin && (
-                <input type='text' name='username' placeholder='Enter username' required onChange={handleChange} value={form.username} />
-            )}
+        {!isLogin && (
+          <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            required
+            onChange={handleChange}
+            value={form.username}
+            className="auth-input"
+          />
+        )}
 
-            <input type='email' name='email' placeholder='Enter email' required onChange={handleChange} value={form.email} />
-            <input type='password' name='password' placeholder='Enter password' required onChange={handleChange} value={form.password} />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          required
+          onChange={handleChange}
+          value={form.email}
+          className="auth-input"
+        />
 
-            
-            <button type='submit'> { isLogin ? 'Login' : 'Register' } </button>
-            
-            {isLogin ? (
-                <p> Dont have an account? <button type='button' onClick={() => setIsLogin(false)} className='hover:underline cursor-pointer'> Register </button> </p>
-            ) : (
-                <p> Have an account? <button type='button' onClick={() => setIsLogin(true)} className='hover:underline cursor-pointer'> Login </button> </p>
-            )}
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          required
+          onChange={handleChange}
+          value={form.password}
+          className="auth-input"
+        />
 
+        <button
+          type="submit"
+          className="w-full bg-[#123c66] text-white py-2 rounded-md text-sm font-semibold hover:bg-[#0f3254] transition"
+        >
+          {isLogin ? 'LOGIN' : 'REGISTER'}
+        </button>
 
-
-        </form>
-        
-    </div>
+        <p className="text-white/70 text-sm mt-2">
+          {isLogin ? 'Already have an account?' : 'Have an account?'}{' '}
+          <button
+            type="button"
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-white cursor-pointer underline hover:text-white/80"
+          >
+            {isLogin ? 'Register' : 'Login'}
+          </button>
+        </p>
+      </form>
+    </section>
   )
 }

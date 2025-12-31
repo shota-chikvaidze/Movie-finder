@@ -1,9 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const mongoose = require("mongoose")
-const dotenv = require('dotenv')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-
+const session = require('express-session')
+const passport = require('passport')
+const initPassport = require('./config/passport')
 
 const userRoutes = require('./routes/userRoutes')
 const movieRoutes = require('./routes/movieRoutes')
@@ -12,16 +14,29 @@ const watchlistRoutes = require('./routes/watchlistRoutes')
 const ratingRoutes = require('./routes/ratingRoutes')
 
 const app = express()
+initPassport()
 
-dotenv.config()
 app.use(cors({
     origin: [
-      "http://localhost:5173"
+      process.env.CLIENT_URL
     ],
     credentials: true 
 }));
 app.use(express.json())
 app.use(cookieParser())
+
+app.use(session({
+  secret: process.env.JWT,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  },
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/auth', userRoutes)
 app.use('/api/movie', movieRoutes)

@@ -112,45 +112,6 @@ exports.getUser = async (req, res) => {
     }
 }
 
-exports.googleLogin = async (req, res) => {
-    try{
-
-        const { token } = req.body
-        if(!token){
-            return res.status(404).json({message: 'no token'})
-        }
-
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.CLIENT_ID
-        })
-
-        const { email, name, picture } = ticket.getPayload()
-
-        let user = await User.findOne({ email })
-
-        if(!user){
-            const dummyPass = await bcrypt.hash('googleuser123!', 10)
-
-            user = await User.create({
-                username: name,
-                email,
-                password: dummyPass,
-                avatar: picture,
-            })
-        }
-
-        const appToken = jwt.sign({ id: user._id }, process.env.JWT, {
-            expiresIn: '2d'
-        })
-
-        res.status(200).json({message: 'google sign in was successful', token: appToken, user})
-
-    }catch(err){
-        res.status(500).json({message: 'google error', error: err.message})
-    }
-}
-
 
 exports.logout = async (req, res) => {
     try{
@@ -166,4 +127,25 @@ exports.logout = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'server error', error: err.message })
     }
+}
+
+exports.googleCallback = async (req, res) => {
+  try {
+    const user = req.user
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1d'
+    })
+
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
+    })
+
+    return res.redirect(`${process.env.FRONTEND_URL}/auth/success`)
+  } catch (err) {
+    return res.redirect(`${process.env.FRONTEND_URL}/login?error=google`)
+  }
 }

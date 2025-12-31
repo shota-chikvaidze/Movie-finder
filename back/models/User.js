@@ -5,7 +5,8 @@ const userSchema = mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    avatar: { type: Object },
+    avatar: { type: String },
+    provider: { type: String, enum: ['local', 'google'], default: 'local' },
     favorite: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
     watchList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
 })

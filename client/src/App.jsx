@@ -20,7 +20,7 @@ function App() {
   const user = UserAuthStore((s) => s.user)
 
   if(isLoading) {
-    return <p>Loading...</p>
+    return <p className="text-white/70 flex justify-center items-center h-[100vh]">Loading...</p>
   }
 
   return (
