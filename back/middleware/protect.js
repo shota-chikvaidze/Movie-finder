@@ -5,7 +5,7 @@ const protect = async (req, res, next) => {
     let token = req.cookies?.accessToken
 
     if(!token){
-        return res.status(404).json({message: 'no token'})
+        return res.status(401).json({message: 'no token'})
     }
 
     try{

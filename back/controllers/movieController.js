@@ -6,14 +6,14 @@ exports.getMovie = async (req, res) => {
         const { mood, genre, country, minRating, maxRating, year, search } = req.query
         const page = Number(req.query.page) || 1
         const limit = Number(req.query.limit) || 20
-        const skip = (page - 1) * 20
+        const skip = (page - 1) * limit
 
         const query = {}
 
         if(mood) query.mood = { $in: [mood] }
         if(search) query.title = { $regex: search, $options: 'i' }
         if(genre) query.genres = { $in: [genre] }
-        if(country) query.country = country
+        if(country) query.countries = { $in: [country] }
         if(year) query.releaseYear = Number(year)
         if(minRating || maxRating) {
             query.rating = {}
@@ -21,8 +21,19 @@ exports.getMovie = async (req, res) => {
             if(maxRating) query.rating.$lte = Number(maxRating)
         }
 
+        const totalMovies = await Movie.countDocuments(query)
         const movie = await Movie.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit)
-        res.status(200).json({message: 'movie received successfully', movie})
+        
+        res.status(200).json({
+            message: 'movie received successfully', 
+            movie,
+            pagination: {
+                currentPage: page,
+                totalPages: Math.ceil(totalMovies / limit),
+                totalMovies,
+                hasMore: page * limit < totalMovies
+            }
+        })
 
     }catch(err){
         res.status(500).json({message: 'error getting movies', error: err.message})

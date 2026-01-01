@@ -10,7 +10,7 @@ module.exports = function initPassport() {
         clientSecret: process.env.CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
-      async (profile, done) => {
+      async (accessToken, refreshToken, profile, done) => {
         try {
           const email = profile.emails?.[0]?.value
           const username = profile.displayName

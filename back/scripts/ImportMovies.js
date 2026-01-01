@@ -13,7 +13,7 @@ async function importMovies() {
 
   let allMovies = []
 
-  for (let page = 1; page <= 100; page++) {
+  for (let page = 1; page <= 10; page++) {
     const res = await axios.get(
       `${TMDB_URL}/movie/popular`,
       {

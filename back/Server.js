@@ -12,6 +12,9 @@ const movieRoutes = require('./routes/movieRoutes')
 const favoriteRoutes = require('./routes/favoriteRoutes')
 const watchlistRoutes = require('./routes/watchlistRoutes')
 const ratingRoutes = require('./routes/ratingRoutes')
+const swaggerUi = require('swagger-ui-express')
+const swaggerSpec = require('./config/swagger')
+
 
 const app = express()
 initPassport()
@@ -43,6 +46,9 @@ app.use('/api/movie', movieRoutes)
 app.use('/api/favorite', favoriteRoutes)
 app.use('/api/watchlist', watchlistRoutes)
 app.use('/api/rating', ratingRoutes)
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
 
 const PORT = process.env.PORT || 5000
 

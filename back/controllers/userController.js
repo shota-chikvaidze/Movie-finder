@@ -1,9 +1,6 @@
-const express = require('express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
-const { OAuth2Client } = require('google-auth-library')
-const client = new OAuth2Client(process.env.CLIENT_ID)
 
 exports.register = async (req, res) => {
     try{
@@ -133,7 +130,11 @@ exports.googleCallback = async (req, res) => {
   try {
     const user = req.user
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    if (!user) {
+      return res.redirect(`${process.env.CLIENT_URL}/login?error=no-user`)
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT, {
       expiresIn: '1d'
     })
 
@@ -142,10 +143,12 @@ exports.googleCallback = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
     })
 
-    return res.redirect(`${process.env.FRONTEND_URL}/auth/success`)
+    return res.redirect(`${process.env.CLIENT_URL}/auth/success`)
   } catch (err) {
-    return res.redirect(`${process.env.FRONTEND_URL}/login?error=google`)
+    console.error('Google callback error:', err)
+    return res.redirect(`${process.env.CLIENT_URL}/login?error=google`)
   }
 }

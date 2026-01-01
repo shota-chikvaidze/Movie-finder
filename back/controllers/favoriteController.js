@@ -3,7 +3,7 @@ const User = require('../models/User')
 exports.addMovie = async (req, res) => {
     try{
 
-        const movieId = req.params.movieId
+        const movieId = req.params.id
         const userId = req.user.id
 
         const user = await User.findById(userId)

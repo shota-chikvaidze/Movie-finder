@@ -12,7 +12,7 @@
 }
 
 body {
-    background-color: rgb(50, 52, 55);
+    background: linear-gradient(to bottom right, #1a1d29, #2f3236, #1a1d29);
 }
 
 .paragraph {

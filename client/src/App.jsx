@@ -4,18 +4,28 @@ import { UserAuthStore } from './store/UserAuthStore'
 import { FetchMe } from './hooks/FetchUser'
 
 import { Login } from "./pages/login/Login"
+import { AuthSuccess } from "./components/authSuccess/AuthSuccess"
 
 import { Home } from './pages/home/Home'
 import { Movies } from "./pages/movies/Movies"
 import { Series } from "./pages/series/Series"
 import { Recom } from "./pages/recom/Recom"
+import { Watchlists } from "./pages/Watchlists/Watchlists"
+import { Favorites } from "./pages/favorites/Favorites"
+import MovieParams from './components/movieParams/MovieParams'
 
 import Navbar from './layout/Navbar'
 
+const MainLayout = ({ children, noPadding = false }) => (
+  <>
+    <Navbar />
+    <div className={noPadding ? '' : 'pt-[80px]'}>
+      {children}
+    </div>
+  </>
+)
 
 function App() {
-
-  
   const { isLoading } = FetchMe()
   const user = UserAuthStore((s) => s.user)
 
@@ -24,29 +34,27 @@ function App() {
   }
 
   return (
-    <>
-
-      {!user && (
-        <Routes>
-          <Route path="/" element={ <Login /> } />
-          <Route path="*" element={ <Navigate to={'/'} /> } />
-        </Routes>
-      )}
-
-      {user && (
+    <Routes>
+      {!user ? (
         <>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={ <Home /> } />
-            <Route path="/movies" element={ <Movies /> } />
-            <Route path="/series" element={ <Series /> } />
-            <Route path="/recommendations" element={ <Recom /> } />
-            <Route path="*" element={ <Navigate to={'/'} /> } />
-          </Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/auth/success" element={<AuthSuccess />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </>
+      ) : (
+        <>
+          <Route path="/" element={<MainLayout noPadding><Home /></MainLayout>} />
+          <Route path="/movies" element={<MainLayout><Movies /></MainLayout>} />
+          <Route path="/movie/:id" element={<MainLayout><MovieParams /></MainLayout>} />
+          <Route path="/series" element={<MainLayout><Series /></MainLayout>} />
+          <Route path="/watchlists" element={<MainLayout><Watchlists /></MainLayout>} />
+          <Route path="/favorites" element={<MainLayout><Favorites /></MainLayout>} />
+          <Route path="/recommendations" element={<MainLayout><Recom /></MainLayout>} />
+          <Route path="/auth/success" element={<AuthSuccess />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </>
       )}
-
-    </>
+    </Routes>
   )
 }
 

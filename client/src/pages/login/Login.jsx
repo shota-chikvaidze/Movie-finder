@@ -48,6 +48,10 @@ export const Login = () => {
 
     }
 
+    const handleGoogleLogin = () => {
+      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`
+    }
+
   return (
     <section className="flex justify-center items-center min-h-screen bg-[#2f3236] px-4">
       <form
@@ -60,7 +64,7 @@ export const Login = () => {
 
         <button
           type="button"
-          onClick={GoogleEndpoint}
+          onClick={handleGoogleLogin}
           className="w-full flex items-center justify-center gap-3 bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-white/90 transition"
         >
           <img
