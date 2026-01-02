@@ -21,7 +21,8 @@ initPassport()
 
 app.use(cors({
     origin: [
-      process.env.CLIENT_URL
+      process.env.CLIENT_URL,
+      'https://movie-finder-ten-rho.vercel.app'
     ],
     credentials: true 
 }));
@@ -35,6 +36,8 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
   },
 }))
 
