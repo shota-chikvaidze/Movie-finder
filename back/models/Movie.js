@@ -18,8 +18,13 @@ const movieShema = mongoose.Schema({
     cast: [String],
     writers: [String],
     ageRating: String,
+
+    type: { type: String, enum: ['movie', 'series'], required: true },
+    isEnriched: { type: Boolean, default: false }
+
     
 
 }, { timestamps: true })
 
 module.exports = mongoose.model('Movie', movieShema)
+

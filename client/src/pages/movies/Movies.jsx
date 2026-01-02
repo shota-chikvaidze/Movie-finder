@@ -25,6 +25,7 @@ export const Movies = () => {
   const queryParams = {
     page,
     limit: 20,
+    type: 'movie',
     ...(searchQuery && { search: searchQuery }),
     ...(filters.genre && { genre: filters.genre }),
     ...(filters.year && { year: filters.year }),
@@ -275,7 +276,7 @@ export const Movies = () => {
             )}
 
             {pagination.totalPages > 1 && (
-              <div className="mt-12 flex items-center justify-center gap-2">
+              <div className="my-12 flex items-center justify-center gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}

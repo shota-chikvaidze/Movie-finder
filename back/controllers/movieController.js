@@ -3,13 +3,14 @@ const Movie = require('../models/Movie')
 exports.getMovie = async (req, res) => {
     try{
         
-        const { mood, genre, country, minRating, maxRating, year, search } = req.query
+        const { mood, genre, country, minRating, maxRating, year, search, type } = req.query
         const page = Number(req.query.page) || 1
         const limit = Number(req.query.limit) || 20
         const skip = (page - 1) * limit
 
         const query = {}
 
+        if(type) query.type = type
         if(mood) query.mood = { $in: [mood] }
         if(search) query.title = { $regex: search, $options: 'i' }
         if(genre) query.genres = { $in: [genre] }
@@ -48,35 +49,5 @@ exports.getMoviesById = async (req, res) => {
 
     }catch(err){
         res.status(500).json({message: 'error getting movies by id', error: err.message})
-    }
-}
-
-exports.addMovie = async (req, res) => {
-    try{
-
-        const { title, description, runtime, genres, mood, country, rating, director, cast, writers, ageRating } = req.body
-
-        if(!title || !description || !runtime || !genres || !mood || !country || !rating || !director || !cast || !writers || !ageRating){
-            return res.status(400).json({message: 'all fields required'})
-        }
-
-        const createMovie = await Movie.create({
-            title, 
-            description, 
-            runtime, 
-            genres, 
-            mood, 
-            country, 
-            rating, 
-            director, 
-            cast, 
-            writers, 
-            ageRating            
-        })
-
-        res.status(201).json({message: 'movie added successfuly', createMovie})
-        
-    }catch(err){
-        res.status(500).json({message: 'error adding movie', error: err.message})
     }
 }
