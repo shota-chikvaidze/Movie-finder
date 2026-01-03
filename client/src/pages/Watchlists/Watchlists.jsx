@@ -141,7 +141,7 @@ export const Watchlists = () => {
                     setDeletePopup(true)
                     setMovieToDelete(movie)
                   }}
-                  className='absolute top-3 left-3 px-2 py-2  text-xs font-medium bg-red-600/80 hover:bg-red-600 text-white rounded-lg transition-all flex items-center gap-1 shadow-lg cursor-pointer'
+                  className='absolute top-3 left-3 px-2 py-2 text-xs font-medium bg-red-600/80 hover:bg-red-600 text-white rounded-lg transition-all flex items-center gap-1 shadow-lg cursor-pointer'
                 >
                   <RxCross1 className='text-[12px]' />
                 </button>

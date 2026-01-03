@@ -15,10 +15,12 @@ export const Movies = () => {
     year: '',
     country: '',
     genre: '',
-    minRating: ''
+    minRating: '',
+    mood: '',
   })
 
-  const genres = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi', 'Romance', 'Thriller', 'Adventure', 'Family', 'Animation']
+  const genres = ['Action', 'War', 'History', 'Documentary', 'Mystery', 'Crime', 'Science Fiction', 'Fantasy', 'Comedy', 'Drama', 'Horror', 'Sci-Fi', 'Romance', 'Thriller', 'Adventure', 'Music', 'Family', 'Animation']  
+  const moods = [  'Dark',  'Emotional',  'Feel-Good',  'Intense',  'Suspenseful',  'Epic',  'Chill',  'Inspirational',  'Romantic',  'Mysterious',  'Funny',  'Hopeful',  'Serious',  'Gritty',  'Heartwarming',  'Thought-Provoking',  'Adventurous']
   const countries = ['United States of America', 'United Kingdom', 'Japan', 'South Korea', 'France', 'Germany', 'India', 'Canada']
   const years = Array.from({ length: 2026 - 1990 }, (_, i) => 2026 - i)
 
@@ -30,7 +32,8 @@ export const Movies = () => {
     ...(filters.genre && { genre: filters.genre }),
     ...(filters.year && { year: filters.year }),
     ...(filters.country && { country: filters.country }),
-    ...(filters.minRating && { minRating: filters.minRating })
+    ...(filters.minRating && { minRating: filters.minRating }),
+    ...(filters.mood && { mood: filters.mood }),
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -129,6 +132,20 @@ export const Movies = () => {
                     <option className='bg-[#33363b]' value="">All genres...</option>
                     {genres.map(genre => (
                       <option className='bg-[#33363b]' key={genre} value={genre}>{genre}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-white/70 text-sm mb-2 block">Mood</label>
+                  <select
+                    value={filters.mood}
+                    onChange={(e) => handleFilterChange('mood', e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-white/30 transition"
+                  >
+                    <option className='bg-[#33363b]' value="">All moods...</option>
+                    {moods.map(mood => (
+                      <option className='bg-[#33363b]' key={mood} value={mood}>{mood}</option>
                     ))}
                   </select>
                 </div>

@@ -11,7 +11,7 @@ exports.getMovie = async (req, res) => {
         const query = {}
 
         if(type) query.type = type
-        if(mood) query.mood = { $in: [mood] }
+        if(mood) query.moods = { $in: [mood] }
         if(search) query.title = { $regex: search, $options: 'i' }
         if(genre) query.genres = { $in: [genre] }
         if(country) query.countries = { $in: [country] }

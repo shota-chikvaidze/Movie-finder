@@ -10,7 +10,7 @@ const movieShema = mongoose.Schema({
 
     popularity: Number,
     genres: [String],
-    mood: [String],
+    moods: [String],
     countries: [String],
 
     rating: { type: Number, min: 0, max: 10 },
@@ -20,8 +20,9 @@ const movieShema = mongoose.Schema({
     ageRating: String,
 
     type: { type: String, enum: ['movie', 'series'], required: true },
-    isEnriched: { type: Boolean, default: false }
-
+    isEnriched: { type: Boolean, default: false },
+    moodsProcessed: { type: Boolean, default: false }
+    
     
 
 }, { timestamps: true })
