@@ -168,4 +168,6 @@ router.post('/movie/watchlist/:id', protect, watchlistController.addMovie)
  */
 router.get('/get-watchlist-movie', protect, watchlistController.getWatchlist)
 
+router.delete('/remove-movie/:id', protect, watchlistController.deleteMovie)
+
 module.exports = router

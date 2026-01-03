@@ -168,4 +168,6 @@ router.post('/movie/favorite/:id', protect, favoriteController.addMovie)
  */
 router.get('/get-favorites', protect, favoriteController.getFavorites)
 
+router.delete('/delete-favorite/:id', protect, favoriteController.deleteFavMovie)
+
 module.exports = router

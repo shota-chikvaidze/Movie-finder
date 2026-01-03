@@ -10,6 +10,11 @@ exports.addMovie = async (req, res) => {
         if(!user) return res.status(404).json({message: 'user not found'})
 
         const index = user.favorite.indexOf(movieId)
+        const includesMovie = user.favorite.includes(movieId)
+
+        if(includesMovie){
+            return res.status(400).json({message: 'Movie already exists'})
+        }
 
         if(index === -1){
             user.favorite.push(movieId)
@@ -37,5 +42,28 @@ exports.getFavorites = async (req, res) => {
 
     }catch(err){
         res.status(500).json({message: 'error getting favorites', error: err.message})
+    }
+}
+
+exports.deleteFavMovie = async (req, res) => {
+    try{
+        
+        const movieId = req.params.id
+        const userId = req.user.id
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $pull: { favorite: movieId } },
+            { new: true }
+        )
+
+        if(!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        
+        res.status(200).json({ message: 'Movie removed from favorite' })
+
+    }catch(err){
+        res.status(500).json({message: 'error deleting movie', error: err.message})
     }
 }

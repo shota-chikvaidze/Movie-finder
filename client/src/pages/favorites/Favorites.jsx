@@ -1,10 +1,12 @@
-import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { GetFavoriteEndpoint } from '../../api/endpoint/favorites'
+import React, { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { GetFavoriteEndpoint, DeleteFavoriteEndpoint } from '../../api/endpoint/favorites'
 import { Link } from 'react-router-dom'
 import { FaHeart, FaStar, FaPlay } from 'react-icons/fa'
 import { MdDateRange } from 'react-icons/md'
 import { BiTime } from 'react-icons/bi'
+import { RxCross1 } from "react-icons/rx";
+
 
 export const Favorites = () => {
 
@@ -12,8 +14,21 @@ export const Favorites = () => {
         queryKey: ['get-favorites'],
         queryFn: () => GetFavoriteEndpoint()
     })
+    const [deletePopup, setDeletePopup] = useState(false)
+    const [movieToDelete, setMovieToDelete] = useState(null)
+    const qc = useQueryClient()
 
     const favorites = data?.fav || []
+
+    const deleteFav = useMutation({
+      mutationKey: ['delete-fav'],
+      mutationFn: (id) => DeleteFavoriteEndpoint(id),
+      onSuccess: () => {
+        setDeletePopup(false)
+        qc.invalidateQueries({ queryKey: ['get-favorites'] })
+      }
+    })
+
 
     if(isLoading) {
       return (
@@ -28,7 +43,7 @@ export const Favorites = () => {
       <div className='max-w-7xl mx-auto'>
         <div className='mb-12 '>
           <div className='flex items-center gap-4 mb-4'>
-            <FaHeart className='text-5xl text-rose-400 animate-pulse' />
+            <FaHeart className='text-4xl text-rose-400' />
             <h1 className='text-5xl font-bold text-white'>My Favorites</h1>
           </div>
           <p className='text-gray-400 text-lg'>
@@ -38,14 +53,13 @@ export const Favorites = () => {
 
         {favorites.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-20'>
-            <FaHeart className='text-9xl text-rose-400/20 mb-6' />
             <h2 className='text-2xl text-gray-400 mb-4'>No favorites yet</h2>
             <p className='text-gray-500 mb-6'>Start adding movies you love to your favorites!</p>
             <Link 
               to='/movies'
               className='bg-rose-600 hover:bg-rose-700 text-white px-8 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2'
             >
-              <FaHeart /> Find Movies to Favorite
+              Find Movies to Favorite
             </Link>
           </div>
         ) : (
@@ -53,7 +67,7 @@ export const Favorites = () => {
             {favorites.map((movie) => (
               <div 
                 key={movie._id}
-                className='group bg-gradient-to-r from-gray-800/50 to-rose-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-rose-500/20 hover:border-rose-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-rose-500/20'
+                className='relative group bg-gradient-to-r from-gray-800/50 to-rose-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-rose-500/20 hover:border-rose-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-rose-500/20'
               >
                 <div className='flex flex-col md:flex-row'>
                   <Link 
@@ -145,11 +159,54 @@ export const Favorites = () => {
                     </div>
                   </div>
                 </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setDeletePopup(true)
+                    setMovieToDelete(movie)
+                  }}
+                  className='absolute bottom-4 right-4 px-4 py-2 bg-red-600/80 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 flex items-center gap-2 shadow-lg cursor-pointer'
+                >
+                  <RxCross1 /> Remove
+                </button>
+
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {deletePopup && movieToDelete && (
+        <div className='fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex justify-center items-center p-4 animate-in fade-in duration-200' onClick={() => setDeletePopup(false)}>
+          <div className='rounded-2xl bg-black/40 p-6 max-w-md w-full shadow-2xl border border-rose-500/30 animate-in zoom-in duration-200' onClick={(e) => e.stopPropagation()}>
+            <div className='flex flex-col items-center text-center'>
+              
+              <h2 className='text-2xl font-bold text-white mb-2'>Remove from Favorites?</h2>
+              <p className='text-gray-400 mb-6'>
+                Are you sure you want to remove <span className='text-rose-400 font-semibold'>"{movieToDelete.title}"</span> from your favorites?
+              </p>
+
+              <div className='flex gap-3 w-full'>
+                <button
+                  onClick={() => setDeletePopup(false)}
+                  className='flex-1 px-6 py-3 bg-gray-700 cursor-pointer hover:bg-gray-600 text-white rounded-lg font-semibold transition-all hover:scale-105'
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => deleteFav.mutate(movieToDelete._id)}
+                  disabled={deleteFav.isPending}
+                  className='flex-1 px-6 py-3 bg-rose-600 cursor-pointer hover:bg-rose-700 text-white rounded-lg font-semibold transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed'
+                >
+                  {deleteFav.isPending ? 'Removing...' : 'Remove'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

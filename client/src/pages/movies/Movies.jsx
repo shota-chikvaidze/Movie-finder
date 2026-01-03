@@ -126,9 +126,9 @@ export const Movies = () => {
                     onChange={(e) => handleFilterChange('genre', e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-white/30 transition"
                   >
-                    <option value="">All genres...</option>
+                    <option className='bg-[#33363b]' value="">All genres...</option>
                     {genres.map(genre => (
-                      <option key={genre} value={genre}>{genre}</option>
+                      <option className='bg-[#33363b]' key={genre} value={genre}>{genre}</option>
                     ))}
                   </select>
                 </div>
@@ -140,9 +140,9 @@ export const Movies = () => {
                     onChange={(e) => handleFilterChange('year', e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-white/30 transition"
                   >
-                    <option value="">All years...</option>
+                    <option className='bg-[#33363b]' value="">All years...</option>
                     {years.map(year => (
-                      <option key={year} value={year}>{year}</option>
+                      <option className='bg-[#33363b]' key={year} value={year}>{year}</option>
                     ))}
                   </select>
                 </div>
@@ -154,9 +154,9 @@ export const Movies = () => {
                     onChange={(e) => handleFilterChange('country', e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-white/30 transition"
                   >
-                    <option value="">All countries...</option>
+                    <option className='bg-[#33363b]' value="">All countries...</option>
                     {countries.map(country => (
-                      <option key={country} value={country}>{country}</option>
+                      <option className='bg-[#33363b]' key={country} value={country}>{country}</option>
                     ))}
                   </select>
                 </div>
@@ -168,11 +168,11 @@ export const Movies = () => {
                     onChange={(e) => handleFilterChange('minRating', e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-white/30 transition"
                   >
-                    <option value="">Any rating</option>
-                    <option value="9">9+ <FaStar className='text-[yellow]' /></option>
-                    <option value="8">8+ <FaStar className='text-[yellow]' /></option>
-                    <option value="7">7+ <FaStar className='text-[yellow]' /></option>
-                    <option value="6">6+ <FaStar className='text-[yellow]' /></option>
+                    <option className='bg-[#33363b]' value="">Any rating</option>
+                    <option className='bg-[#33363b]' value="9"> 9+ </option>
+                    <option className='bg-[#33363b]' value="8"> 8+ </option>
+                    <option className='bg-[#33363b]' value="7"> 7+ </option>
+                    <option className='bg-[#33363b]' value="6"> 6+ </option>
                   </select>
                 </div>
               </div>
