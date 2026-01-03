@@ -3,7 +3,7 @@ const express = require('express')
 const mongoose = require("mongoose")
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+// const session = require('express-session')
 const passport = require('passport')
 const initPassport = require('./config/passport')
 
@@ -29,20 +29,20 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-app.use(session({
-  secret: process.env.JWT,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000
-  },
-}))
+// app.use(session({
+//   secret: process.env.JWT,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     secure: process.env.NODE_ENV === 'production',
+//     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+//     httpOnly: true,
+//     maxAge: 24 * 60 * 60 * 1000
+//   },
+// }))
 
 app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.session())
 
 app.use('/api/auth', userRoutes)
 app.use('/api/movie', movieRoutes)
