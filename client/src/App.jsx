@@ -28,17 +28,19 @@ const MainLayout = ({ children, noPadding = false }) => (
 function App() {
   const { isLoading } = FetchMe()
   const user = UserAuthStore((s) => s.user)
+  const isInitialized = UserAuthStore((s) => s.isInitialized)
 
-  if(isLoading) {
+  if(isLoading || !isInitialized) {
     return <p className="text-white/70 flex justify-center items-center h-[100vh]">Loading...</p>
   }
 
   return (
     <Routes>
+      <Route path="/auth/success" element={<AuthSuccess />} />
+      
       {!user ? (
         <>
           <Route path="/" element={<Login />} />
-          <Route path="/auth/success" element={<AuthSuccess />} />
           <Route path="*" element={<Navigate to="/" />} />
         </>
       ) : (
@@ -50,7 +52,6 @@ function App() {
           <Route path="/watchlists" element={<MainLayout><Watchlists /></MainLayout>} />
           <Route path="/favorites" element={<MainLayout><Favorites /></MainLayout>} />
           <Route path="/recommendations" element={<MainLayout><Recom /></MainLayout>} />
-          <Route path="/auth/success" element={<AuthSuccess />} />
           <Route path="*" element={<Navigate to="/" />} />
         </>
       )}

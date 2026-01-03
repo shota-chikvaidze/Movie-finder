@@ -13,8 +13,6 @@ exports.addMovie = async (req, res) => {
 
         if(index === -1){
             user.favorite.push(movieId)
-        }else{
-            user.favorite.splice(index, 1)
         }
 
         await user.save()

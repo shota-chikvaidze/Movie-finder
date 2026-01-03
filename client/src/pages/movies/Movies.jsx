@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { GetMovieEndpoint } from '../../api/endpoint/movie'
 import { Link } from 'react-router-dom'
@@ -40,6 +40,10 @@ export const Movies = () => {
 
   const movies = data?.movie || []
   const pagination = data?.pagination || {}
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [page])
 
 
   const handleFilterChange = (key, value) => {
