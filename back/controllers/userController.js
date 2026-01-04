@@ -28,13 +28,20 @@ exports.register = async (req, res) => {
             expiresIn: '1d'
         })
 
-        res.cookie('accessToken', token, {
+        const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 1 * 24 * 60 * 60 * 1000,
             path: '/'
-        })
+        }
+        
+        res.cookie('accessToken', token, cookieOptions)
+        
+        // Additional header for debugging
+        res.header('X-Auth-Token-Set', 'true')
+        
+        console.log('✅ User registered:', email, 'Cookie set with options:', cookieOptions)
 
         const userSafe = {
             id: createUser._id,
@@ -42,7 +49,7 @@ exports.register = async (req, res) => {
             email: createUser.email,
         }
 
-        res.status(201).json({message: 'user created successfuly', user: userSafe})
+        res.status(201).json({message: 'user created successfuly', user: userSafe, cookieSet: true})
     }catch(err){
         res.status(500).json({message: 'register error', error: err.message})
     }
@@ -67,13 +74,20 @@ exports.login = async (req, res) => {
             expiresIn: '1d'
         })
 
-        res.cookie('accessToken', token, {
+        const cookieOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 1 * 24 * 60 * 60 * 1000,
             path: '/'
-        })
+        }
+        
+        res.cookie('accessToken', token, cookieOptions)
+        
+        // Additional header for debugging
+        res.header('X-Auth-Token-Set', 'true')
+        
+        console.log('✅ User logged in:', email, 'Cookie set with options:', cookieOptions)
 
         const userSafe = {
             id: findUser._id,
@@ -82,7 +96,7 @@ exports.login = async (req, res) => {
         }
 
 
-        res.status(200).json({message: 'user logged in successfully', user: userSafe})
+        res.status(200).json({message: 'user logged in successfully', user: userSafe, cookieSet: true})
 
     }catch(err){
         res.status(500).json({message: 'login error', error: err.message})

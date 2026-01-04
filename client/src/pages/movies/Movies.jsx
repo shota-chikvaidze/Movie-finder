@@ -36,10 +36,16 @@ export const Movies = () => {
     ...(filters.mood && { mood: filters.mood }),
   }
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['get-movies', queryParams],
     queryFn: () => GetMovieEndpoint(queryParams)
   })
+
+  useEffect(() => {
+    if (isError) {
+      console.error('❌ Failed to load movies:', error?.response?.data || error?.message)
+    }
+  }, [isError, error])
 
   const movies = data?.movie || []
   const pagination = data?.pagination || {}

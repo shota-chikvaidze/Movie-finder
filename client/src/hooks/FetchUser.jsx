@@ -7,7 +7,7 @@ export const FetchMe = () => {
     const setAuth = UserAuthStore(s => s.setAuth)
     const clearAuth = UserAuthStore(s => s.clearAuth)
 
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
         queryKey: ['me'],
         queryFn: () => MeEndpoint(),
         retry: false,
@@ -15,13 +15,15 @@ export const FetchMe = () => {
 
     useEffect(() => {
         if(data?.user) {
+            console.log('✅ User fetched:', data.user)
             setAuth(data.user)
         } 
     
         if(isError) {
+            console.error('❌ Failed to fetch user:', error?.response?.data || error?.message)
             clearAuth()
         }
     
-    },  [data, isError, setAuth, clearAuth]) 
+    },  [data, isError, error, setAuth, clearAuth]) 
     return { isLoading }
 }

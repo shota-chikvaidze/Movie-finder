@@ -19,7 +19,7 @@ const swaggerSpec = require('./config/swagger')
 const app = express()
 initPassport()
 
-app.set('trust proxy', 1)  // Trust first proxy (required for Render)
+app.set('trust proxy', 1) 
 
 app.use(cors({
     origin: [
