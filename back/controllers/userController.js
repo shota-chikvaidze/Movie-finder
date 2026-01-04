@@ -32,7 +32,8 @@ exports.register = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-            maxAge: 1 * 24 * 60 * 60 * 1000 
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            path: '/'
         })
 
         const userSafe = {
@@ -41,7 +42,7 @@ exports.register = async (req, res) => {
             email: createUser.email,
         }
 
-        res.status(201).json({message: 'user created successfuly', accessToken: token, user: userSafe})
+        res.status(201).json({message: 'user created successfuly', user: userSafe})
     }catch(err){
         res.status(500).json({message: 'register error', error: err.message})
     }
@@ -70,7 +71,8 @@ exports.login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-            maxAge: 1 * 24 * 60 * 60 * 1000 
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            path: '/'
         })
 
         const userSafe = {
@@ -80,7 +82,7 @@ exports.login = async (req, res) => {
         }
 
 
-        res.status(200).json({message: 'user logged in successfully', user: userSafe, accessToken: token})
+        res.status(200).json({message: 'user logged in successfully', user: userSafe})
 
     }catch(err){
         res.status(500).json({message: 'login error', error: err.message})
@@ -116,8 +118,8 @@ exports.logout = async (req, res) => {
         res.clearCookie('accessToken', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 0
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/'
         })
 
         res.status(200).json({ message: 'Logged out successfully' })
