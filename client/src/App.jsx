@@ -36,6 +36,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/auth/success" element={<AuthSuccess />} />
       
       {!user ? (
         <>
@@ -44,7 +45,6 @@ function App() {
         </>
       ) : (
         <>
-          <Route path="/auth/success" element={<AuthSuccess />} />
           <Route path="/" element={<MainLayout noPadding><Home /></MainLayout>} />
           <Route path="/movies" element={<MainLayout><Movies /></MainLayout>} />
           <Route path="/movie/:id" element={<MainLayout><MovieParams /></MainLayout>} />

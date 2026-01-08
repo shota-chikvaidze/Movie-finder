@@ -150,7 +150,6 @@ exports.googleCallback = async (req, res) => {
 
     return res.redirect(`${process.env.CLIENT_URL}/auth/success`)
   } catch (err) {
-    console.error('Google callback error:', err)
     return res.redirect(`${process.env.CLIENT_URL}/login?error=google`)
   }
 }
