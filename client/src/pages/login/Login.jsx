@@ -23,12 +23,8 @@ export const Login = () => {
         mutationKey: ['login'],
         mutationFn: (login) => LoginEndpoint(login),
         onSuccess: (data) => {
-            console.log('✅ Login response:', { cookieSet: data.cookieSet, user: data.user })
             setAuth(data.user)
             navigate('/')
-        },
-        onError: (error) => {
-            console.error('❌ Login error:', error.response?.data || error.message)
         }
     })
 
@@ -36,12 +32,8 @@ export const Login = () => {
         mutationKey: ['register'],
         mutationFn: (register) => RegisterEndpoint(register),
         onSuccess: (data) => {
-            console.log('✅ Register response:', { cookieSet: data.cookieSet, user: data.user })
             setAuth(data.user)
             navigate('/')
-        },
-        onError: (error) => {
-            console.error('❌ Register error:', error.response?.data || error.message)
         }
     })
 
