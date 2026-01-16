@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { GoogleEndpoint, LoginEndpoint, RegisterEndpoint } from '../../api/endpoint/auth'
 import { useNavigate } from 'react-router-dom'
 import { UserAuthStore } from '../../store/UserAuthStore'
+import googleLogo from '../../assets/google-logo.webp'
 
 export const Login = () => {
 
@@ -65,14 +66,16 @@ export const Login = () => {
         <button
           type="button"
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-white/90 transition"
+          className="w-full flex items-center justify-center gap-2 bg-white py-2 rounded-md hover:bg-white/90 transition"
         >
           <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            src={googleLogo}
             alt="Google"
-            className="w-5 h-5"
+            className="w-6 h-6"
           />
-          Continue with Google
+          <p className='font-[500] text-black text-sm'>
+            Continue with Google
+          </p>
         </button>
 
         {!isLogin && (

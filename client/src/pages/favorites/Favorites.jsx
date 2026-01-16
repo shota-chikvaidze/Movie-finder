@@ -67,7 +67,7 @@ export const Favorites = () => {
             {favorites.map((movie) => (
               <div 
                 key={movie._id}
-                className='relative group bg-gradient-to-r from-gray-800/50 to-rose-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-rose-500/20 hover:border-rose-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-rose-500/20'
+                className='relative group bg-black/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-rose-500/20 transition-all duration-300 hover:shadow-2xl '
               >
                 <div className='flex flex-col md:flex-row'>
                   <Link 
@@ -87,7 +87,7 @@ export const Favorites = () => {
                     )}
                     
                     <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center'>
-                      <FaPlay className='text-5xl text-rose-400' />
+                      <FaPlay className='text-5xl text-white/70' />
                     </div>
 
                     {movie.rating && (

@@ -10,8 +10,8 @@ import { RxCross1 } from "react-icons/rx";
 export const Watchlists = () => {
 
     const { data, isLoading } = useQuery({
-        queryKey: ['get-watchlist'],
-        queryFn: () => GetWatchlistEndpoint()
+      queryKey: ['get-watchlist'],
+      queryFn: () => GetWatchlistEndpoint()
     })
 
     const watchlist = data?.watchlists || []
@@ -68,14 +68,14 @@ export const Watchlists = () => {
         ) : (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
             {watchlist.map((movie) => (
-              <div key={movie._id} className='group relative bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-blue-500/20 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20'>
+              <div key={movie._id} className='group relative bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-blue-500/20 hover:border-blue-500/50 transition-all duration-300 hover:scale-102 '>
                 <Link to={`/movie/${movie._id}`} >
                   <div className='relative aspect-[2/3] overflow-hidden bg-slate-700'>
                     {movie?.image?.poster ? (
                       <img 
                         src={movie.image.poster} 
                         alt={movie.title}
-                        className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
+                        className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
                       />
                     ) : (
                       <div className='w-full h-full flex items-center justify-center text-gray-600'>

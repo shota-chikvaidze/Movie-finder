@@ -35,9 +35,7 @@ export const Recom = () => {
 
         <div className='mb-20'>
           <div className='flex items-center gap-3 mb-8'>
-            <IoMdTrendingUp className='text-4xl text-orange-500' />
             <h2 className='text-4xl font-bold text-white'>Trending Now</h2>
-            <div className='flex-1 h-1 bg-gradient-to-r from-orange-500 to-transparent rounded-full'></div>
           </div>
 
           {trendingLoading ? (
@@ -55,7 +53,7 @@ export const Recom = () => {
                 <Link 
                   to={`/movie/${movie._id}`}
                   key={movie._id}
-                  className='group relative bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-orange-500/20 hover:border-orange-500/60 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/20'
+                  className='group relative bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-orange-500/20  transition-all duration-300 hover:scale-105 '
                 >
                   <div className='absolute top-3 left-3 z-10 bg-orange-500 text-white px-3 py-1 rounded-full font-bold text-sm flex items-center gap-1 shadow-lg'>
                     <FaFire /> #{index + 1}
@@ -125,9 +123,7 @@ export const Recom = () => {
 
         <div>
           <div className='flex items-center gap-3 mb-8'>
-            <MdRecommend className='text-4xl text-purple-400' />
             <h2 className='text-4xl font-bold text-white'>Recommended For You</h2>
-            <div className='flex-1 h-1 bg-gradient-to-r from-purple-500 to-transparent rounded-full'></div>
           </div>
 
           {recomLoading ? (
@@ -146,7 +142,7 @@ export const Recom = () => {
                 <Link 
                   to={`/movie/${movie._id}`}
                   key={movie._id}
-                  className='group bg-gradient-to-r from-gray-800/50 to-purple-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20'
+                  className='group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300  '
                 >
                   <div className='flex flex-col md:flex-row'>
                     <div className='relative md:w-48 aspect-[2/3] md:aspect-auto flex-shrink-0 overflow-hidden bg-gray-700'>
@@ -154,7 +150,7 @@ export const Recom = () => {
                         <img 
                           src={movie.image.poster} 
                           alt={movie.title}
-                          className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
+                          className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
                         />
                       ) : (
                         <div className='w-full h-full flex items-center justify-center text-gray-600'>
