@@ -55,7 +55,7 @@ const MovieParams = () => {
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900'>
       {movie?.image?.backdrop && (
-        <div className='relative h-[500px] w-full overflow-hidden'>
+        <div className='relative h-[220px] sm:h-[380px] lg:h-[500px] w-full overflow-hidden'>
           <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent z-10' />
           <img 
             src={movie.image.backdrop} 
@@ -65,15 +65,15 @@ const MovieParams = () => {
         </div>
       )}
 
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-80 relative z-20'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 sm:-mt-52 lg:-mt-80 relative z-20'>
         <div className='flex flex-col lg:flex-row gap-8'>
           
           <div className='flex-shrink-0'>
             <div className='relative group'>
-              <img 
-                src={movie?.image?.poster} 
+              <img
+                src={movie?.image?.poster}
                 alt={movie.title}
-                className='w-full lg:w-80 rounded-xl shadow-2xl border-4 border-gray-700/50 transition-transform duration-300 group-hover:scale-105'
+                className='w-40 sm:w-56 lg:w-80 rounded-xl shadow-2xl border-4 border-gray-700/50 transition-transform duration-300 group-hover:scale-105'
               />
               {movie.ageRating && (
                 <div className='absolute top-4 right-4 bg-yellow-500 text-black font-bold px-3 py-1 rounded-lg text-sm'>
@@ -86,7 +86,7 @@ const MovieParams = () => {
           <div className='flex-1 text-white'>
 
             <div className='mb-6'>
-              <h1 className='text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg'>
+              <h1 className='text-2xl sm:text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg'>
                 {movie.title}
               </h1>
               
@@ -123,7 +123,7 @@ const MovieParams = () => {
                 </div>
               )}
 
-              <div className='flex gap-4 items-center mb-6'>
+              <div className='flex flex-wrap gap-3 items-center mb-6'>
                 <button
                   onClick={() => watchListMutation.mutate(movie._id)}
                   disabled={watchListMutation.isPending}
@@ -152,7 +152,7 @@ const MovieParams = () => {
 
             {movie.overview && (
               <div className='mb-8'>
-                <h2 className='text-2xl font-bold mb-3 text-yellow-500'>Overview</h2>
+                <h2 className='text-xl sm:text-2xl font-bold mb-3 text-yellow-500'>Overview</h2>
                 <p className='text-gray-300 text-lg leading-relaxed'>
                   {movie.overview}
                 </p>
@@ -185,7 +185,7 @@ const MovieParams = () => {
 
             {movie.cast && movie.cast.length > 0 && (
               <div className='bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700'>
-                <h2 className='text-2xl font-bold mb-4 text-yellow-500'>Cast</h2>
+                <h2 className='text-xl sm:text-2xl font-bold mb-4 text-yellow-500'>Cast</h2>
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3'>
                   {movie.cast.map((actor, index) => (
                     <div 

@@ -52,6 +52,16 @@ app.use('/api/favorite', favoriteRoutes)
 app.use('/api/watchlist', watchlistRoutes)
 app.use('/api/rating', ratingRoutes)
 
+app.get('/health', (req, res) => {
+  const healthCheck = {
+    uptime: process.uptime(),
+    status: 'ok',
+    timeStamps: Date.now(),
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  }
+  res.status(200).json(healthCheck)
+})
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 

@@ -33,7 +33,7 @@ export const Favorites = () => {
     if(isLoading) {
       return (
         <div className='min-h-screen flex items-center justify-center'>
-          <div className='text-2xl text-rose-400 animate-pulse'>Loading your favorites...</div>
+          <div className='text-2xl text-white'>Loading your favorites...</div>
         </div>
       )
     }
@@ -43,10 +43,9 @@ export const Favorites = () => {
       <div className='max-w-7xl mx-auto'>
         <div className='mb-12 '>
           <div className='flex items-center gap-4 mb-4'>
-            <FaHeart className='text-4xl text-rose-400' />
-            <h1 className='text-5xl font-bold text-white'>My Favorites</h1>
+            <h1 className='text-3xl sm:text-5xl font-bold text-white'>My Favorites</h1>
           </div>
-          <p className='text-gray-400 text-lg'>
+          <p className='text-gray-400 text-sm sm:text-lg'>
             {favorites.length === 0 ? 'No favorites yet' : `${favorites.length} favorite movie${favorites.length !== 1 ? 's' : ''}`}
           </p>
         </div>
@@ -72,7 +71,7 @@ export const Favorites = () => {
                 <div className='flex flex-col md:flex-row'>
                   <Link 
                     to={`/movie/${movie._id}`}
-                    className='relative md:w-48 aspect-[2/3] md:aspect-auto flex-shrink-0 overflow-hidden bg-gray-700'
+                    className='relative w-full md:w-48 aspect-[2/3] md:aspect-auto flex-shrink-0 overflow-hidden bg-gray-700'
                   >
                     {movie?.image?.poster ? (
                       <img 
@@ -100,7 +99,7 @@ export const Favorites = () => {
 
                   <div className='flex-1 p-6'>
                     <Link to={`/movie/${movie._id}`}>
-                      <h3 className='text-white font-bold text-2xl mb-3 group-hover:text-rose-400 transition-colors'>
+                      <h3 className='text-white font-bold text-xl sm:text-2xl mb-3 group-hover:text-rose-400 transition-colors'>
                         {movie.title}
                       </h3>
                     </Link>
@@ -166,7 +165,7 @@ export const Favorites = () => {
                     setDeletePopup(true)
                     setMovieToDelete(movie)
                   }}
-                  className='absolute bottom-4 right-4 px-4 py-2 bg-red-600/80 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 flex items-center gap-2 shadow-lg cursor-pointer'
+                  className='absolute bottom-3 right-3 sm:bottom-4 sm:right-4 px-3 sm:px-4 py-2 bg-red-600/80 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 flex items-center gap-2 shadow-lg cursor-pointer'
                 >
                   <RxCross1 /> Remove
                 </button>

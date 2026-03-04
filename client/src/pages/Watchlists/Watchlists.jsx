@@ -34,7 +34,7 @@ export const Watchlists = () => {
     if(isLoading) {
       return (
         <div className='min-h-screen flex items-center justify-center'>
-          <div className='text-2xl text-blue-400 animate-pulse'>Loading your watchlist...</div>
+          <div className='text-2xl text-white'>Loading your watchlist...</div>
         </div>
       )
     }
@@ -45,10 +45,9 @@ export const Watchlists = () => {
 
         <div className='mb-12'>
           <div className='flex items-center gap-4 mb-4'>
-            <MdWatchLater className='text-5xl text-blue-400' />
-            <h1 className='text-5xl font-bold text-white'>My Watchlist</h1>
+            <h1 className='text-3xl sm:text-5xl font-bold text-white'>My Watchlist</h1>
           </div>
-          <p className='text-gray-400 text-lg'>
+          <p className='text-gray-400 text-sm sm:text-lg'>
             {watchlist.length === 0 ? 'Your watchlist is empty' : `${watchlist.length} movie${watchlist.length !== 1 ? 's' : ''} to watch`}
           </p>
         </div>
@@ -66,7 +65,7 @@ export const Watchlists = () => {
             </Link>
           </div>
         ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6'>
             {watchlist.map((movie) => (
               <div key={movie._id} className='group relative bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-blue-500/20 hover:border-blue-500/50 transition-all duration-300 hover:scale-102 '>
                 <Link to={`/movie/${movie._id}`} >

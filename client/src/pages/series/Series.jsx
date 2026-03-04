@@ -77,8 +77,8 @@ export const Series = () => {
       <div className="max-w-7xl mx-auto">
         
         <div className="mb-8">
-          <h1 className="text-white text-4xl font-bold mb-2">Discover Series</h1>
-          <p className="text-white/60 text-lg">Find the perfect series to binge-watch</p>
+          <h1 className="text-white text-2xl sm:text-4xl font-bold mb-2">Discover Series</h1>
+          <p className="text-white/60 text-sm sm:text-lg">Find the perfect series to binge-watch</p>
         </div>
 
         <div className="mb-8 space-y-4">
@@ -96,14 +96,14 @@ export const Series = () => {
 
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`cursor-pointer flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition ${
+              className={`cursor-pointer flex items-center gap-2 px-3 sm:px-6 py-3 rounded-xl font-medium transition ${
                 showFilters || hasActiveFilters
                   ? 'bg-blue-500 text-white'
                   : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10'
               }`}
             >
               <FiFilter className="text-xl" />
-              Filters
+              <span className="hidden sm:inline">Filters</span>
             </button>
           </div>
 
@@ -224,7 +224,7 @@ export const Series = () => {
 
         {isLoading && (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
           </div>
         )}
 
@@ -249,7 +249,7 @@ export const Series = () => {
               )}
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6">
               {movies.map((movie) => (
                 <Link 
                   key={movie._id} 
@@ -301,9 +301,9 @@ export const Series = () => {
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition flex items-center gap-2"
+                  className="px-3 sm:px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
                 >
-                  <FiChevronLeft /> Previous
+                  <FiChevronLeft /> <span className="hidden sm:inline">Previous</span>
                 </button>
 
                 <div className="flex items-center gap-2">
@@ -337,9 +337,9 @@ export const Series = () => {
                 <button
                   onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
                   disabled={page === pagination.totalPages}
-                  className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition flex items-center gap-2"
+                  className="px-3 sm:px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition flex items-center gap-1 sm:gap-2 text-sm sm:text-base"
                 >
-                  Next <FiChevronRight />
+                  <span className="hidden sm:inline">Next</span> <FiChevronRight />
                 </button>
               </div>
             )}

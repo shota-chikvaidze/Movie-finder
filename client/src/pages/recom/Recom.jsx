@@ -28,14 +28,14 @@ export const Recom = () => {
         
         <div className='text-center mb-16'>
           <div className='flex items-center justify-center gap-3 mb-4'>
-            <h1 className='text-5xl font-bold text-white'>Trending & Recommendations</h1>
+            <h1 className='text-2xl sm:text-4xl lg:text-5xl font-bold text-white'>Trending & Recommendations</h1>
           </div>
-          <p className='text-gray-400 text-lg'>Discover what's hot and personalized picks just for you</p>
+          <p className='text-gray-400 text-sm sm:text-lg'>Discover what's hot and personalized picks just for you</p>
         </div>
 
         <div className='mb-20'>
           <div className='flex items-center gap-3 mb-8'>
-            <h2 className='text-4xl font-bold text-white'>Trending Now</h2>
+            <h2 className='text-2xl sm:text-4xl font-bold text-white'>Trending Now</h2>
           </div>
 
           {trendingLoading ? (
@@ -48,7 +48,7 @@ export const Recom = () => {
               <p className='text-gray-400 text-lg'>No trending movies available</p>
             </div>
           ) : (
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'>
+            <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-6'>
               {trending.map((movie, index) => (
                 <Link 
                   to={`/movie/${movie._id}`}
@@ -123,7 +123,7 @@ export const Recom = () => {
 
         <div>
           <div className='flex items-center gap-3 mb-8'>
-            <h2 className='text-4xl font-bold text-white'>Recommended For You</h2>
+            <h2 className='text-2xl sm:text-4xl font-bold text-white'>Recommended For You</h2>
           </div>
 
           {recomLoading ? (
