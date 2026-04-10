@@ -80,7 +80,7 @@ const router = express.Router()
  *                   type: string
  *                   example: "Error retrieving movies"
  */
-router.get('/get-movies', protect, movieContrller.getMovie)
+router.get('/get-movies', movieContrller.getMovie)
 
 /**
  * @swagger
@@ -174,7 +174,7 @@ router.get('/get-movies', protect, movieContrller.getMovie)
  *                   type: string
  *                   example: "Error retrieving movie"
  */
-router.get('/get-movies-id/:id', protect, movieContrller.getMoviesById)
+router.get('/get-movies-id/:id', movieContrller.getMoviesById)
 
 /**
  * @swagger
@@ -246,7 +246,7 @@ router.get('/get-movies-id/:id', protect, movieContrller.getMoviesById)
  *                   type: string
  *                   example: "Error generating recommendations"
  */
-router.get('/recommendation', protect, recommendationContrller.recommendation)
+router.get('/recommendation', recommendationContrller.recommendation)
 
 /**
  * @swagger
@@ -318,6 +318,7 @@ router.get('/recommendation', protect, recommendationContrller.recommendation)
  *                   type: string
  *                   example: "Error retrieving trending movies"
  */
-router.get('/trending', protect, recommendationContrller.trending)
+router.get('/trending', recommendationContrller.trending)
+
 
 module.exports = router

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { FiSearch, FiFilter, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { MdClose } from 'react-icons/md'
 import { FaStar } from "react-icons/fa";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export const Series = () => {
 
@@ -224,7 +225,7 @@ export const Series = () => {
 
         {isLoading && (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+            <AiOutlineLoading3Quarters className='animate-spin text-white text-2xl ' />
           </div>
         )}
 

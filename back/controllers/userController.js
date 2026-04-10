@@ -9,11 +9,11 @@ exports.register = async (req, res) => {
 
         const findUser = await User.findOne({ $or: [{username}, {email}] })
         if(findUser){
-            return res.status(400).json({message: 'user already exists'})
+            return res.status(400).json({message: 'User already exists'})
         }
 
         if(!username || !email || !password){
-            return res.status(400).json({message: 'all fields required'})
+            return res.status(400).json({message: 'All fields required'})
         }         
 
         const hashed = await bcrypt.hash(password, 10)
@@ -42,7 +42,7 @@ exports.register = async (req, res) => {
             email: createUser.email,
         }
 
-        res.status(201).json({message: 'user created successfuly', user: userSafe})
+        res.status(201).json({message: 'User created successfuly', user: userSafe})
     }catch(err){
         res.status(500).json({message: 'register error', error: err.message})
     }
@@ -55,12 +55,12 @@ exports.login = async (req, res) => {
 
         const findUser = await User.findOne({ email })
         if(!findUser){
-            return res.status(404).json({message: 'user not found'})
+            return res.status(404).json({message: 'User not found'})
         }
 
         const checkPass = await bcrypt.compare(password, findUser.password)
         if(!checkPass){
-            return res.status(400).json({message: 'invalid password'})
+            return res.status(400).json({message: 'Invalid password'})
         }
 
         const token = jwt.sign({ id: findUser._id }, process.env.JWT, {
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
         }
 
 
-        res.status(200).json({message: 'user logged in successfully', user: userSafe})
+        res.status(200).json({message: 'User logged in successfully', user: userSafe})
 
     }catch(err){
         res.status(500).json({message: 'login error', error: err.message})
@@ -107,7 +107,7 @@ exports.getUser = async (req, res) => {
         res.status(200).json({user: userSafe})
 
     }catch(err){
-        res.status(500).json({message: 'error getting user', error: err.message})
+        res.status(500).json({message: 'Error getting user', error: err.message})
     }
 }
 
@@ -122,9 +122,9 @@ exports.logout = async (req, res) => {
             path: '/'
         })
 
-        res.status(200).json({ message: 'Logged out successfully' })
+        res.status(200).json({ message: 'Logged out successfully!' })
     } catch (err) {
-        res.status(500).json({ message: 'server error', error: err.message })
+        res.status(500).json({ message: 'Server error', error: err.message })
     }
 }
 

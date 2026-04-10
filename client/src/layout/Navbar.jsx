@@ -2,23 +2,39 @@ import React, { useEffect, useState } from 'react'
 import { UserAuthStore } from '../store/UserAuthStore'
 import { useMutation } from '@tanstack/react-query'
 import { LogoutEndpoint } from '../api/endpoint/auth'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FiMenu, FiX } from 'react-icons/fi'
+import { showSuccessToast, showErrorToast } from '../utils/toastConfig'
 
 const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const user = UserAuthStore((s) => s.user)
 
   const mutation = useMutation({
     mutationKey: ['logout'],
-    mutationFn: () => LogoutEndpoint()
+    mutationFn: () => LogoutEndpoint(),
+    onSuccess: (data) => {
+      showSuccessToast(data.message || "Logged out successfully!")
+    },
+    onError: (error) => {
+      showErrorToast(error?.response?.data?.message || "Error occurred")
+    }
   })
 
   const clearAuth = () => {
     mutation.mutate()
     UserAuthStore.getState().clearAuth()
   }
+
+
+  const navigateLogin = () => {
+    navigate('/login')
+    setMenuOpen(false)
+  }
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +63,24 @@ const Navbar = () => {
         </ul>
 
         <div className='hidden md:block'>
-          <button className='text-[red] px-[19px] py-[8px] transition duration-300 cursor-pointer hover:bg-white/10 rounded-lg' onClick={clearAuth}>Logout</button>
+
+          {user ? (
+            <button 
+              className='text-[red] px-[19px] py-[8px] transition duration-300 cursor-pointer hover:bg-white/10 rounded-lg' 
+              onClick={clearAuth}
+            >
+                Logout
+            </button>
+          ) : (
+            <Link to={'/login'}>
+              <button 
+                className='bg-red-500 text-white px-[19px] py-[8px] cursor-pointer hover:bg-red-600 rounded-lg' 
+                >
+                  Register
+              </button>
+            </Link>
+          )}
+          
         </div>
 
         <button
@@ -68,7 +101,23 @@ const Navbar = () => {
             <li><Link className='text-white/70 text-[16px] transition duration-300 px-3 py-2 hover:bg-white/10 rounded-lg block' to={'/favorites'} onClick={() => setMenuOpen(false)}>Favorites</Link></li>
             <li><Link className='text-white/70 text-[16px] transition duration-300 px-3 py-2 hover:bg-white/10 rounded-lg block' to={'/watchlists'} onClick={() => setMenuOpen(false)}>Whatchlist</Link></li>
             <li className='pt-2 border-t border-white/10 mt-2'>
-              <button className='text-[red] px-3 py-2 transition duration-300 cursor-pointer hover:bg-white/10 rounded-lg w-full text-left' onClick={() => { clearAuth(); setMenuOpen(false) }}>Logout</button>
+
+              {user ? (
+                <button 
+                  className='text-[red] px-3 py-2 transition duration-300 cursor-pointer hover:bg-white/10 rounded-lg w-full text-left' 
+                  onClick={() => { clearAuth(); setMenuOpen(false) }}
+                >
+                  Logout
+                </button>
+              ) : (
+                <button 
+                  onClick={navigateLogin}
+                  className='bg-red-500 text-white px-[19px] py-[8px] cursor-pointer hover:bg-red-600 rounded-lg' 
+                  >
+                    Register
+                </button>
+              )}
+                
             </li>
           </ul>
         </div>

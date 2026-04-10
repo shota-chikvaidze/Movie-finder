@@ -9,38 +9,52 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { MdWatchLater } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import { FaStar, FaCalendarAlt } from "react-icons/fa";
+import { showSuccessToast, showErrorToast } from '../../utils/toastConfig'
 
 const MovieParams = () => {
 
+  const [isWatchlisted, setIsWatchlisted] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
   const { id } = useParams()
 
   const { data: getMovieId = [] } = useQuery({
     queryKey: ['movie-id'],
     queryFn: () => GetMovieIdEndpoint(id)
   })
+  
   const movie = getMovieId?.movie || {}
-  const [message, setMessage] = useState('')
-  const [isWatchlisted, setIsWatchlisted] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
-
 
   const watchListMutation = useMutation({
     mutationKey: ['add-watchlist'],
     mutationFn: (id) => WatchlistEndpoint(id),
-    onSuccess: () => {
-      setMessage('Added to watchlist!')
+    onSuccess: (data) => {
       setIsWatchlisted(true)
       setTimeout(() => setMessage(''), 3000)
+      showSuccessToast(data.message || "Movie added successfully!")
+    },
+    onError: (error) => {
+      if(error?.status === 401) {
+        showErrorToast("Register to perform this action")
+      }else{
+        showErrorToast(error?.response?.data?.message || "Error occurred")
+      }
     }
   })
 
   const favoriteMutation = useMutation({
     mutationKey: ['add-favorite'],
     mutationFn: (id) => FavoriteEndpoint(id),
-    onSuccess: () => {
-      setMessage('Added to favorites!')
+    onSuccess: (data) => {
       setIsFavorited(true)
       setTimeout(() => setMessage(''), 3000)
+      showSuccessToast(data.message || "Movie added successfully!")
+    },
+    onError: (error) => {
+      if(error?.status === 401) {
+        showErrorToast("Register to perform this action")
+      }else{
+        showErrorToast(error?.response?.data?.message || "Error occurred")
+      }
     }
   })
 
@@ -68,7 +82,7 @@ const MovieParams = () => {
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 sm:-mt-52 lg:-mt-80 relative z-20'>
         <div className='flex flex-col lg:flex-row gap-8'>
           
-          <div className='flex-shrink-0'>
+          <div className='flex-shrink-0 w-fit'>
             <div className='relative group'>
               <img
                 src={movie?.image?.poster}
@@ -123,11 +137,11 @@ const MovieParams = () => {
                 </div>
               )}
 
-              <div className='flex flex-wrap gap-3 items-center mb-6'>
+              <div className='flex flex-col sm:flex-row w-full sm:w-auto gap-3 items-center mb-6'>
                 <button
                   onClick={() => watchListMutation.mutate(movie._id)}
                   disabled={watchListMutation.isPending}
-                  className='cursor-pointer flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105'
+                  className='cursor-pointer flex justify-center items-center w-full sm:w-auto gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105'
                 >
                   {isWatchlisted ? <MdWatchLater className='text-2xl' /> : <MdOutlineWatchLater className='text-2xl' />}
                   <span>Watchlist</span>
@@ -136,17 +150,11 @@ const MovieParams = () => {
                 <button
                   onClick={() => favoriteMutation.mutate(movie._id)}
                   disabled={favoriteMutation.isPending}
-                  className='cursor-pointer flex items-center gap-2 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105'
+                  className='cursor-pointer flex justify-center items-center w-full sm:w-auto gap-2 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105'
                 >
                   {isFavorited ? <FaHeart className='text-xl' /> : <FaRegHeart className='text-xl' />}
                   <span>Favorite</span>
                 </button>
-
-                {message && (
-                  <div className='bg-green-500 text-white px-4 py-2 rounded-lg animate-pulse'>
-                    {message}
-                  </div>
-                )}
               </div>
             </div>
 
@@ -185,8 +193,10 @@ const MovieParams = () => {
 
             {movie.cast && movie.cast.length > 0 && (
               <div className='bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700'>
+                
                 <h2 className='text-xl sm:text-2xl font-bold mb-4 text-yellow-500'>Cast</h2>
-                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3'>
+                
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                   {movie.cast.map((actor, index) => (
                     <div 
                       key={index}

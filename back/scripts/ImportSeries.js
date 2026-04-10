@@ -12,7 +12,7 @@ async function seedSeries() {
 
   let allSeries = []
 
-  for (let page = 1; page <= 10; page++) {
+  for (let page = 1; page <= 25; page++) {
     const res = await axios.get(`${TMDB_URL}/tv/popular`, {
       params: {
         api_key: API_KEY,
@@ -60,8 +60,18 @@ async function seedSeries() {
     console.log(`Fetched TV page ${page}`)
   }
 
-  await Movie.insertMany(allSeries, { ordered: false })
-  console.log(`Inserted ${allSeries.length} series`)
+  try {
+    const result = await Movie.insertMany(allSeries, { ordered: false })
+    console.log('Inserted:', result.length)
+  } catch (err) {
+    console.log('Validation errors:', err.writeErrors?.length)
+    console.log(err.writeErrors?.[0]?.err?.errmsg)
+  }
+
+  const count = await Movie.countDocuments()
+  console.log('TOTAL IN DB:', count)
+
+
   process.exit()
 }
 

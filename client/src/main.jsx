@@ -8,11 +8,11 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop.jsx'
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
-        <QueryClientProvider client={queryClient} >
-            <Router>
-                <ScrollToTop />
-
-                <App />
-            </Router>
-        </QueryClientProvider>
+    <QueryClientProvider client={queryClient} >
+        <Router>
+            <ScrollToTop />
+            
+            <App />
+        </Router>
+    </QueryClientProvider>
 )

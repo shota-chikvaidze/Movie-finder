@@ -1,42 +1,73 @@
 import React, { useState } from 'react'
+
+import { UserAuthStore } from '../../store/UserAuthStore'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { GetFavoriteEndpoint, DeleteFavoriteEndpoint } from '../../api/endpoint/favorites'
+
 import { Link } from 'react-router-dom'
-import { FaHeart, FaStar, FaPlay } from 'react-icons/fa'
+import { FaStar, FaPlay } from 'react-icons/fa'
 import { MdDateRange } from 'react-icons/md'
 import { BiTime } from 'react-icons/bi'
 import { RxCross1 } from "react-icons/rx";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 export const Favorites = () => {
 
-    const { data, isLoading } = useQuery({
-        queryKey: ['get-favorites'],
-        queryFn: () => GetFavoriteEndpoint()
-    })
-    const [deletePopup, setDeletePopup] = useState(false)
-    const [movieToDelete, setMovieToDelete] = useState(null)
-    const qc = useQueryClient()
+  const [deletePopup, setDeletePopup] = useState(false)
+  const [movieToDelete, setMovieToDelete] = useState(null)
+  const qc = useQueryClient()
+  const user = UserAuthStore((s) => s.user)
 
-    const favorites = data?.fav || []
+  const { data, isLoading } = useQuery({
+    queryKey: ['get-favorites'],
+    queryFn: () => GetFavoriteEndpoint(),
+    enabled: !!user
+  })
 
-    const deleteFav = useMutation({
-      mutationKey: ['delete-fav'],
-      mutationFn: (id) => DeleteFavoriteEndpoint(id),
-      onSuccess: () => {
-        setDeletePopup(false)
-        qc.invalidateQueries({ queryKey: ['get-favorites'] })
-      }
-    })
+  const favorites = data?.fav || []
 
 
-    if(isLoading) {
-      return (
-        <div className='min-h-screen flex items-center justify-center'>
-          <div className='text-2xl text-white'>Loading your favorites...</div>
-        </div>
-      )
+  const deleteFav = useMutation({
+    mutationKey: ['delete-fav'],
+    mutationFn: (id) => DeleteFavoriteEndpoint(id),
+    onSuccess: (data) => {
+      setDeletePopup(false)
+      qc.invalidateQueries({ queryKey: ['get-favorites'] })
+      showSuccessToast(data.message || "Movie removed successfully")
+    },
+    onError: (error) => {
+      showErrorToast(error?.response?.data?.message || "Error occurred")
     }
+  })
+
+
+  if(isLoading) {
+    return (
+      <div className="min-h-[90vh] flex justify-center items-center py-20">
+        <AiOutlineLoading3Quarters className='animate-spin mb-20 text-white text-3xl ' />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-[90vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5 text-center">
+          <div>
+            <h2 className="text-white text-xl font-bold font-mono">Your favorites list is empty</h2>
+            <p className="text-white/40 text-sm font-mono mt-2">Create an account to start saving movies & series</p>
+          </div>
+
+          <Link to="/login">
+            <button className="border border-[#545454] hover:border-[#8d8d8d] cursor-pointer text-white font-mono text-sm font-semibold px-7 py-2.5 rounded-md transition-colors">
+              Register Now
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-br py-12 px-4 sm:px-6 lg:px-8'>
@@ -54,12 +85,6 @@ export const Favorites = () => {
           <div className='flex flex-col items-center justify-center py-20'>
             <h2 className='text-2xl text-gray-400 mb-4'>No favorites yet</h2>
             <p className='text-gray-500 mb-6'>Start adding movies you love to your favorites!</p>
-            <Link 
-              to='/movies'
-              className='bg-rose-600 hover:bg-rose-700 text-white px-8 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2'
-            >
-              Find Movies to Favorite
-            </Link>
           </div>
         ) : (
           <div className='space-y-6'>

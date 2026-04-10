@@ -7,54 +7,80 @@ import googleLogo from '../../assets/google-logo.webp'
 
 export const Login = () => {
 
-    const [form, setForm] = useState({
+  const [form, setForm] = useState({
+      username: '',
+      email: '',
+      password: ''
+  })
+  const [isLogin, setIsLogin] = useState(true)
+  const setAuth = UserAuthStore((s) => s.setAuth)
+  const navigate = useNavigate()  
+
+
+  const loginMutate = useMutation({
+    mutationKey: ['login'],
+    mutationFn: (login) => LoginEndpoint(login),
+    onSuccess: (data) => {      
+      setAuth(data.user)
+      navigate('/')
+      showSuccessToast(data.message|| "Logged in successfully!")
+    },
+    onError: (error) => {
+      showErrorToast(error?.response?.data?.message || "Error occurred")
+    }
+  })
+
+
+  const registerMutate = useMutation({
+    mutationKey: ['register'],
+    mutationFn: (register) => RegisterEndpoint(register),
+    onSuccess: (data) => {
+      setAuth(data.user)
+      navigate('/')
+      showSuccessToast(data.message || "Registered successfully!")
+    },
+    onError: (error) => {
+      showErrorToast(error?.response?.data?.message || "Error occurred")
+    }
+  })
+
+  const handleChange = (e) => {
+    setForm({...form, [e.target.name]: e.target.value})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if(isLogin === true) {
+      loginMutate.mutate({ email: form.email, password: form.password })
+    }else {
+      registerMutate.mutate(form)
+    }
+  }
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`
+  }
+  
+  const handleNavigateToRegister = () => {
+    if(isLogin === true) {
+      setForm({
+        email: '',
+        password: ''
+      })
+      setIsLogin(false)
+    }else{
+      setForm({
         username: '',
         email: '',
         password: ''
-    })
-    const [isLogin, setIsLogin] = useState(true)
-    const setAuth = UserAuthStore((s) => s.setAuth)
-    const navigate = useNavigate()
-
-    const handleChange = (e) => {
-        setForm({...form, [e.target.name]: e.target.value})
+      })
+      setIsLogin(true)
     }
-
-    const loginMutate = useMutation({
-        mutationKey: ['login'],
-        mutationFn: (login) => LoginEndpoint(login),
-        onSuccess: (data) => {
-            setAuth(data.user)
-            navigate('/')
-        }
-    })
-
-    const registerMutate = useMutation({
-        mutationKey: ['register'],
-        mutationFn: (register) => RegisterEndpoint(register),
-        onSuccess: (data) => {
-            setAuth(data.user)
-            navigate('/')
-        }
-    })
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        if(isLogin === true){
-            loginMutate.mutate({ email: form.email, password: form.password })
-        }else{
-            registerMutate.mutate(form)
-        }
-
-    }
-
-    const handleGoogleLogin = () => {
-      window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`
-    }
+  }
 
   return (
-    <section className="flex justify-center items-center min-h-screen bg-[#2f3236] px-4">
+    <section className="flex justify-center items-center min-h-[90vh] px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-[420px] flex flex-col items-center gap-4"
@@ -121,7 +147,7 @@ export const Login = () => {
           {isLogin ? 'Already have an account?' : 'Have an account?'}{' '}
           <button
             type="button"
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={handleNavigateToRegister}
             className="text-white cursor-pointer underline hover:text-white/80"
           >
             {isLogin ? 'Register' : 'Login'}

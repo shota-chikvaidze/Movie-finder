@@ -1,46 +1,76 @@
 import React, { useState } from 'react'
+
+import { UserAuthStore } from '../../store/UserAuthStore'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { GetWatchlistEndpoint, DeleteWatchlistEndpoint } from '../../api/endpoint/watchlist'
 import { Link } from 'react-router-dom'
+
 import { MdWatchLater, MdRemoveRedEye } from 'react-icons/md'
 import { FaStar, FaCalendarAlt } from 'react-icons/fa'
 import { IoMdTime } from 'react-icons/io'
 import { RxCross1 } from "react-icons/rx";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export const Watchlists = () => {
 
-    const { data, isLoading } = useQuery({
-      queryKey: ['get-watchlist'],
-      queryFn: () => GetWatchlistEndpoint()
-    })
-
-    const watchlist = data?.watchlists || []
-
-    const [deletePopup, setDeletePopup] = useState(false)
-    const [movieToDelete, setMovieToDelete] = useState(null)
-    const qc = useQueryClient()
+  const user = UserAuthStore((store) => store.user)
+  const [deletePopup, setDeletePopup] = useState(false)
+  const [movieToDelete, setMovieToDelete] = useState(null)
+  const qc = useQueryClient()
 
 
-    const deleteWatchlist = useMutation({
-      mutationKey: ['delete-watchlist'],
-      mutationFn: (id) => DeleteWatchlistEndpoint(id),
-      onSuccess: () => {
-        setDeletePopup(false)
-        qc.invalidateQueries({ queryKey: ['get-watchlist'] })
-      }
-    })
+  const { data, isLoading } = useQuery({
+    queryKey: ['get-watchlist'],
+    queryFn: () => GetWatchlistEndpoint(),
+    enabled: !!user
+  })
 
+  const watchlist = data?.watchlists || []
 
-    if(isLoading) {
-      return (
-        <div className='min-h-screen flex items-center justify-center'>
-          <div className='text-2xl text-white'>Loading your watchlist...</div>
-        </div>
-      )
+  
+  const deleteWatchlist = useMutation({
+    mutationKey: ['delete-watchlist'],
+    mutationFn: (id) => DeleteWatchlistEndpoint(id),
+    onSuccess: () => {
+      setDeletePopup(false)
+      qc.invalidateQueries({ queryKey: ['get-watchlist'] })
+      showSuccessToast(data.message || "Movie removed successfully")
+    },
+    onError: (error) => {
+      showErrorToast(error?.response?.data?.message || "Error occurred")
     }
+  })
+
+
+  if(isLoading) {
+    return (
+      <div className="min-h-[90vh] flex justify-center items-center py-20">
+        <AiOutlineLoading3Quarters className='animate-spin mb-20 text-white text-3xl ' />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-[90vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-5 text-center">
+          <div>
+            <h2 className="text-white text-xl font-bold font-mono">Your whatchlist is empty</h2>
+            <p className="text-white/40 text-sm font-mono mt-2">Create an account to start saving movies & series</p>
+          </div>
+
+          <Link to="/login">
+            <button className="border border-[#545454] hover:border-[#8d8d8d] cursor-pointer text-white font-mono text-sm font-semibold px-7 py-2.5 rounded-md transition-colors">
+              Register Now
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className='min-h-screen  py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-7xl mx-auto'>
 
         <div className='mb-12'>

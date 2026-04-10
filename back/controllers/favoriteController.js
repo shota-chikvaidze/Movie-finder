@@ -22,11 +22,11 @@ exports.addMovie = async (req, res) => {
 
         await user.save()
 
-        res.status(200).json({message: 'movie added to favorites', favorites: user.favorite})
+        res.status(200).json({message: 'Movie added successfully!', favorites: user.favorite})
 
 
     }catch(err){
-        res.status(500).json({message: 'error adding movie to favorites', error: err.message})
+        res.status(500).json({message: 'Error adding movie to favorites', error: err.message})
     }
 }
 

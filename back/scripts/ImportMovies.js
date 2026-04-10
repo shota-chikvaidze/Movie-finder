@@ -12,7 +12,7 @@ async function importMovies() {
 
   let allMovies = []
 
-  for (let page = 1; page <= 10; page++) {
+  for (let page = 1; page <= 25; page++) {
     const res = await axios.get(
       `${TMDB_URL}/movie/popular`,
       {
@@ -29,6 +29,7 @@ async function importMovies() {
 
         title: m.title,
         overview: m.overview,
+        type: "movie",
 
         releaseYear: m.release_date
           ? Number(m.release_date.split('-')[0])
@@ -48,7 +49,7 @@ async function importMovies() {
         popularity: m.popularity,
 
         genres: [],
-        mood: [],
+        moods: [],
         countries: [],
 
         rating: m.vote_average,
@@ -59,7 +60,9 @@ async function importMovies() {
         ageRating: null
     }))
 
-    const filteredMovies = movies.filter(m => m.image.poster)
+    const filteredMovies = movies.filter(
+      m => typeof m.image.poster === 'string' && m.image.poster.length > 0
+    )
 
 
     allMovies.push(...filteredMovies)
@@ -67,8 +70,16 @@ async function importMovies() {
   }
 
   await Movie.deleteMany({})
-  await Movie.insertMany(allMovies, { ordered: false })
-  console.log(`Imported ${allMovies.length} movies`)
+  try {
+    const result = await Movie.insertMany(allMovies, { ordered: false })
+    console.log('Inserted:', result.length)
+  } catch (err) {
+    console.log('Validation errors:', err.writeErrors?.length)
+    console.log(err.writeErrors?.[0]?.err?.errmsg)
+  }
+
+  const count = await Movie.countDocuments()
+  console.log('TOTAL IN DB:', count)
 
   process.exit()
 }

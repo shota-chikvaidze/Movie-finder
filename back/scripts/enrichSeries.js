@@ -14,10 +14,7 @@ async function enrichSeries() {
   console.log('Connected to DB')
 
   while (true) {
-    const series = await Movie.find({
-      type: 'series',
-      isEnriched: { $ne: true }
-    }).limit(BATCH_SIZE)
+    const series = await Movie.find({ type: 'series', isEnriched: { $ne: true } }).limit(BATCH_SIZE)
 
 
     if (series.length === 0) {

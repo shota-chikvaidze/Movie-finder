@@ -1,4 +1,7 @@
 import React from "react"
+import { Toaster } from 'react-hot-toast'
+import { toastStyles } from './utils/toastConfig' 
+
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { UserAuthStore } from './store/UserAuthStore'
 import { FetchMe } from './hooks/FetchUser'
@@ -14,6 +17,8 @@ import { Watchlists } from "./pages/Watchlists/Watchlists"
 import { Favorites } from "./pages/favorites/Favorites"
 import MovieParams from './components/movieParams/MovieParams'
 
+import { AuthGuard } from './components/guards/AuthGuard'
+
 import Navbar from './layout/Navbar'
 
 const MainLayout = ({ children, noPadding = false }) => (
@@ -27,7 +32,6 @@ const MainLayout = ({ children, noPadding = false }) => (
 
 function App() {
   const { isLoading } = FetchMe()
-  const user = UserAuthStore((s) => s.user)
   const isInitialized = UserAuthStore((s) => s.isInitialized)
 
   if(isLoading || !isInitialized) {
@@ -35,27 +39,28 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/auth/success" element={<AuthSuccess />} />
-      
-      {!user ? (
-        <>
-          <Route path="/" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </>
-      ) : (
-        <>
-          <Route path="/" element={<MainLayout noPadding><Home /></MainLayout>} />
-          <Route path="/movies" element={<MainLayout><Movies /></MainLayout>} />
-          <Route path="/movie/:id" element={<MainLayout><MovieParams /></MainLayout>} />
-          <Route path="/series" element={<MainLayout><Series /></MainLayout>} />
-          <Route path="/watchlists" element={<MainLayout><Watchlists /></MainLayout>} />
-          <Route path="/favorites" element={<MainLayout><Favorites /></MainLayout>} />
-          <Route path="/recommendations" element={<MainLayout><Recom /></MainLayout>} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </>
-      )}
-    </Routes>
+    <>
+
+      <Toaster position="top-right" toastOptions={toastStyles} />
+
+      <Routes>
+        <Route path="/auth/success" element={<AuthSuccess />} />
+        <Route path="/" element={<MainLayout noPadding><Home /></MainLayout>} />
+        <Route path="/movies" element={<MainLayout><Movies /></MainLayout>} />
+        <Route path="/movie/:id" element={<MainLayout><MovieParams /></MainLayout>} />
+        <Route path="/series" element={<MainLayout><Series /></MainLayout>} />
+
+        <Route element={ <AuthGuard /> }>
+          <Route path="/login" element={ <MainLayout> <Login /> </MainLayout> } />
+        </Route>
+
+        <Route path="/watchlists" element={<MainLayout><Watchlists /></MainLayout>} />
+        <Route path="/favorites" element={<MainLayout><Favorites /></MainLayout>} />
+        <Route path="/recommendations" element={<MainLayout><Recom /></MainLayout>} />
+        <Route path="*" element={<Navigate to="/" />} />
+        
+      </Routes>
+    </>
   )
 }
 

@@ -23,7 +23,7 @@ exports.getMovie = async (req, res) => {
         }
 
         const totalMovies = await Movie.countDocuments(query)
-        const movie = await Movie.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit)
+        const movie = await Movie.find(query).sort({ releaseYear: -1 }).skip(skip).limit(limit)
         
         res.status(200).json({
             message: 'movie received successfully', 

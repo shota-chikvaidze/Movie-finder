@@ -14,12 +14,15 @@ async function enrichMovies() {
   console.log('Connected to DB')
 
   while (true) {
-    const movies = await Movie.find({ runtime: null }).limit(BATCH_SIZE)
+    const movies = await Movie.find({ type: "movie", isEnriched: { $ne: true } }).limit(BATCH_SIZE)
 
     if (movies.length === 0) {
       console.log('All movies enriched ✅')
       break
     }
+
+    console.log(`\nProcessing batch of ${movies.length} series...`)
+
 
     for (const movie of movies) {
       try {
@@ -48,13 +51,16 @@ async function enrichMovies() {
         await Movie.updateOne(
           { _id: movie._id },
           {
-            runtime: details.data.runtime,
-            genres: details.data.genres.map(g => g.name),
-            countries: details.data.production_countries.map(c => c.name),
-            director: director?.name || null,
-            writers: writers.map(w => w.name),
-            cast: credits.data.cast.slice(0, 10).map(a => a.name),
-            ageRating
+            $set: {
+              runtime: details.data.runtime,
+              genres: details.data.genres.map(g => g.name),
+              countries: details.data.production_countries.map(c => c.name),
+              director: director?.name || null,
+              writers: writers.map(w => w.name),
+              cast: credits.data.cast.slice(0, 10).map(a => a.name),
+              ageRating,
+              isEnriched: true
+            }
           }
         )
 
